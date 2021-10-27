@@ -13,12 +13,10 @@ const getTours = new Promise((res) => {
 
 const useToursLogicProvider = () => {
   const context = useStateContext();
-  // tutaj zmiana na samo useStateContext()
 
   const { state, setState } = context;
-  // najpierw desktrukturyzacja contextu
-  const { loading, tours, tourToDelete, txt } = state;
-  // dopiero potem możemy zdestrukturyzować state
+  const { loading, tours } = state;
+
 
   const fetchObjects = () => {
     getTours.then((data) => {
@@ -29,7 +27,8 @@ const useToursLogicProvider = () => {
   const removeTour = useCallback(
     ({ id }) => {
       const newTour = tours.filter((tour) => tour.id !== id);
-      setState({ ...context, loading: false, tours: newTour, tourToDelete: true });
+      // tu trzeba było nazwę propa zmienić na toDelete
+      setState({ ...context, loading: false, tours: newTour, toDelete: true });
     },
     [tours],
   );
@@ -38,11 +37,12 @@ const useToursLogicProvider = () => {
     fetchObjects();
   }, []);
 
-  return { fetchObjects, removeTour, loading, tours, tourToDelete, txt };
+  return { fetchObjects, removeTour, loading, tours };
 };
 
 function Task2() {
-  const { fetchObjects, removeTour, loading, tours, tourToDelete, txt } = useToursLogicProvider();
+  const { fetchObjects, removeTour, loading, tours } = useToursLogicProvider();
+
   if (loading) {
     return (
       <main>
@@ -62,7 +62,7 @@ function Task2() {
 
   return (
     <>
-      <Tours tours={tours} removeTour={removeTour} tourToDelete={tourToDelete} />
+      <Tours tours={tours} removeTour={removeTour} />
     </>
   );
 }

@@ -6,7 +6,6 @@ const initialState = {
   loading: true,
   tours: [],
   toDelete: false,
-  txt: 'TestMemoKomponent',
 };
 
 export const useStateContext = () => React.useContext(ToursContext);
