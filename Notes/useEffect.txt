@@ -1,0 +1,3 @@
+it provokes component to perform activity after render
+
+we use useEffect in a component to have access to values like state or setState

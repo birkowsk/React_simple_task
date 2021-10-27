@@ -1,0 +1,78 @@
+React memo is related to func components / it stops rerender if value of existing component isn't change
+It can be used with simple types beacuase with copy of reference doesn't work correctly
+
+const TestMemo = React.memo(() => {
+  console.log('rerender testowego komponentu');
+  return <h2>Memo test</h2>;
+});
+
+if we change text in TestMemo component then it will rerender
+
+/////////////////////////
+
+useCallback is related to functions
+it stops render value if different component will be changed
+we set the value when the func will rerender
+
+/////////////////////////
+
+useMemo is realated to functions / it depends on state of parent component
+
+useMemo(() => {
+        function
+      }, [toursList])
+
+ if channge in component state is related with state in [] then function inside useMemo will be updated
+
+
+// ------MEMO------
+// działanie memo: wyrenderuje cię tylko wtedy kiedy props (w tym stan) przychodzący z góry zmieni się
+// memo nie działa na typy złożone (obiekty, tablice, funkcje), ponieważ tworzą one nową referencję i są odczytywane jako nowe
+
+// ------USECALLBACK------
+// zwraca zapamiętaną funkcję
+// działanie useCallback: useCallback przyjmuje 2 argumenty:
+                    // 1. funkcje, którą chcemy zmemonizować
+                    // 2. "tablicę" zależności taka jak w useEffect - jeżeli nic do niej nie wstawimy to znaczy, że chcemy, żeby renderowało się tylko na początku i w przypadku zmiany stanu komponentu, w którym wywołujemy tą funkcję
+// dzięki useCallback ta funkcja zostanie "zapisana" i zawsze będzie tą samą refenecją do funkcji w kościach pamięci
+
+// Usecallback samo z siebie nie zadziała - jeżeli używamy memo na komponencie funkcyjnym i jako props przekazujemy funkcje to żeby nie zerwać memonizacji to na tej funkcji przekazywanej do propsa stosujemy useCallback
+                                        //  i odwrotnie - jeżeli w propsach przekazujemy jedynie typ złożony to i tak komponent odbierający propsy musi być opakowany w memo
+
+// Jeżeli mamy zmemonizowany komponent w którym jest jedna funkcja z useCallback to możemy zerwać memonizację, a jak to zrobić?....
+// wystarczy, że do tego komponentu jako propsa przekażemy następną funkcję na której nie będzie useCallbacka....
+
+// ------USEMEMO------
+// zwraca zapamiętaną wartość
+// działanie useMemo: useMemo przyjmuje funkcję jako pierwszy argument i wykonuje działanie w zależności od zmiany stanu w tablicy zależności -> przetrzymuje wartość zwracaną przez podaną funkcję dopóki nie zmienią się argumenty podane w tablicy zależności (w tym przypadku arr)
+
+
+
+// Przykład który uplatycznił wszystko!
+
+function Task4() {
+  const [test, setTest] = useState(true)
+  console.log('Task4 render')
+
+  const someFunc = () => {
+    setTest(!test)
+  }
+
+  return (
+    <>
+      <h2>questions and answers about login</h2>
+      {useMemo(() => data.map((singleData) => (
+        <Question key={singleData.id} {...singleData} someFunc={someFunc} />
+      )), [data])
+      }
+      <button onClick={() => setTest(!test)}>ustaw test</button>
+    </>
+  );
+}
+
+//załóżmy, że mamy funkję zmieniającą stan przekazaną do dziecka - w tym przypadku możemy użyć useMemo na funkcji data.map albo memo na komponencie Questions oraz useCallback na funkcji, czy w takim wypadku należy użyć useMemo z powodu prostszego zapisu?
+
+// Jeżeli nie mielibyśmy test i setTestu i buttona to należałoby wykonać tylko memonizację
+// nr 2. natomiast jeżeli przekazujemy jakąś funkcję z rodzica do dziecka która operuje na jakimś stanie w rodzicu to aby nie przerwać memonizacji musimy dodatkowo tą funkcję opakować w useCallbacka
+// 3 opcja jest taka z racji tego, że komponent question jest w funckji to najlepszą opcją jest użycie useMemo i uzależnienie od tablicy data
+// wtedy w przypadku gdy byśmy zrobili coś takiego jak w nr 2 to by nam to useMemo wystarczyło
