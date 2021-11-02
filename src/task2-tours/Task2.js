@@ -13,7 +13,7 @@ const getTours = new Promise((res) => {
 
 const useToursLogicProvider = () => {
   const context = useStateContext();
-  // tutaj zmiana na samo useStateContext()
+  // tutaj zmiana na samo useStateContext()//
 
   const { state, setState } = context;
   // najpierw desktrukturyzacja contextu
