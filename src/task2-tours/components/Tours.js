@@ -2,7 +2,6 @@ import React, { useMemo, memo } from 'react';
 import '../index.css';
 
 const Article = ({ tour, removeTour }) => {
-  console.log(removeTour)
   return (
     <article key={tour.id} className="single-tour">
       <img src={tour.image} alt="img" />
@@ -21,7 +20,6 @@ const MemoizedArticle = (props) => useMemo(() => <Article {...props} />, [props.
 const Tours = ({ tours, removeTour }) => {
   return (
     <div className="main-container">
-      {/* tu trzeba było ID dodać i removeToura przekazać do article bo nie był przekazany */}
       {tours.map((tour, id) => (
         <MemoizedArticle key={id} tour={tour} removeTour={removeTour} />
       ))}

@@ -27,7 +27,6 @@ const useToursLogicProvider = () => {
   const removeTour = useCallback(
     ({ id }) => {
       const newTour = tours.filter((tour) => tour.id !== id);
-      // tu trzeba było nazwę propa zmienić na toDelete
       setState({ ...context, loading: false, tours: newTour, toDelete: true });
     },
     [tours],
