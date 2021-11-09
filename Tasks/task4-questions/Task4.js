@@ -1,24 +1,15 @@
-import React, { useState, useMemo, useCallback } from 'react';
-import data from './data';
-import Question from './Question';
+import React from 'react';
+// import QuestionHandler from './components/QuestionHandler';
+import Question from './components/Question';
+import questions from './static/data'
 
 function Task4() {
-  const [test, setTest] = useState(true)
-  console.log('Task4 render')
-
-  const someFunc = () => {
-    setTest(!test)
-  }
-
   return (
     <>
       <h2>questions and answers about login</h2>
-      {useMemo(() => data.map((singleData) => (
-        <Question key={singleData.id} {...singleData} someFunc={someFunc} />
-      )), [data])
-        // use memo do wyniesienia
-      }
-      <button onClick={() => setTest(!test)}>ustaw test</button>
+      {questions.map((singleData) => (
+        <Question key={singleData.id} {...singleData} />
+      ))}
     </>
   );
 }
